@@ -1,0 +1,37 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: brain-tasks-cluster
+  region: us-east-1
+  version: "1.29"
+
+vpc:
+  id: vpc-0711ebced76ebb014
+  subnets:
+    public:
+      us-east-1a:
+        id: subnet-0bd840547ef23815f
+      us-east-1b:
+        id: subnet-0da4dffc380b0ee52
+      us-east-1c:
+        id: subnet-09ee0f824a8311f97
+
+nodeGroups:
+  - name: brain-node-group
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 2
+    volumeSize: 20
+    ssh:
+      allow: true
+      publicKeyName: jen
+    labels:
+      role: worker
+    tags:
+      project: brain-tasks
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+        cloudWatch: true

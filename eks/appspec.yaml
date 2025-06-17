@@ -1,0 +1,10 @@
+version: 0.0
+Resources:
+  - myApp:
+      Type: AWS::EKS::Application
+      Properties:
+        TaskDefinition: ""
+        ClusterName: "brain-tasks-cluster"
+        ServiceName: "brain-tasks-service"
+        ImageURI: "<will be dynamically filled>"
+
