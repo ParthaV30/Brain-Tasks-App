@@ -4,8 +4,8 @@ phases:
   pre_build:
     commands:
       - echo Pre-build phase: setting variables
-      - REPOSITORY_URI=075617906556.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-repo
-      - IMAGE_TAG=latest  # or use Git SHA or any tag you pushed manually
+      - export REPOSITORY_URI=075617906556.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-repo
+      - export IMAGE_TAG=latest  # or use git sha
 
   build:
     commands:
