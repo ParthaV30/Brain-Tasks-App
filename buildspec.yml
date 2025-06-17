@@ -1,22 +1,91 @@
 version: 0.2
 
 phases:
-  pre_build:
-    commands:
-      - echo Pre-build phase: setting variables
-      - export REPOSITORY_URI=075617906556.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-repo
-      - export IMAGE_TAG=latest  # or use git sha
-
-  build:
-    commands:
-      - echo Skipping Docker build phase since image is already in ECR
-
   post_build:
     commands:
-      - echo Writing image definitions file for CodeDeploy
-      - printf '[{"name":"brain-tasks-app","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - echo Generating imagedefinitions.json
+      - echo '[{"name":"brain-tasks-app","imageUri":"075617906556.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-repo:latest"}]' > imagedefinitions.json
 
 artifacts:
   files:
     - imagedefinitions.json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
