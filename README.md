@@ -102,7 +102,7 @@ kubectl get svc
 
 ## 🖼️ Screenshots
 
-All screenshots included in `/screenshots` folder:
+All screenshots included in `/Brain-Task-Output` folder:
 
 * ✅ CodePipeline execution
 * ✅ CodeBuild success log
