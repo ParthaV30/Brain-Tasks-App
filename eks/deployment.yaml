@@ -3,7 +3,7 @@ kind: Deployment
 spec:
   containers:
     - name: brain-tasks-app
-      image: 123456789012.dkr.ecr.us‑east‑1.amazonaws.com/brain-tasks-app:latest
+      image: 075617906556.dkr.ecr.us‑east‑1.amazonaws.com/brain-tasks-app:latest
 metadata:
   name: brain-tasks-app
 spec:
