@@ -1,91 +1,43 @@
 version: 0.2
 
+env:
+  variables:
+    AWS_DEFAULT_REGION: us-east-1
+    CLUSTER_NAME: brain-tasks-cluster
+    ECR_URI: 047447426147.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app
+    IMAGE_TAG: latest
+
 phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 047447426147.dkr.ecr.us-east-1.amazonaws.com
+
+      - echo Logging in to Docker Hub...
+      - DOCKERHUB_USERNAME=$(aws ssm get-parameter --name /dockerhub/username --region us-east-1 --query "Parameter.Value" --output text)
+      - DOCKERHUB_PASSWORD=$(aws ssm get-parameter --name /dockerhub/password --with-decryption --region us-east-1 --query "Parameter.Value" --output text)
+      - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+      - IMAGE_URI=047447426147.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
+
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build -t brain-tasks-app:latest .
+      - docker tag brain-tasks-app:latest 047447426147.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
+
   post_build:
     commands:
-      - echo Generating imagedefinitions.json
-      - echo '[{"name":"brain-tasks-app","imageUri":"075617906556.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-repo:latest"}]' > imagedefinitions.json
-
-artifacts:
-  files:
-    - imagedefinitions.json
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      - echo Pushing Docker image to ECR...
+      - docker push 047447426147.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
+
+      - echo Updating kubeconfig for EKS...
+      - aws eks --region us-east-1 update-kubeconfig --name brain-tasks-cluster
+
+      - echo Replacing image URI in Kubernetes manifest...
+      - export IMAGE_URI=047447426147.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
+      - envsubst < brain-tasks-deployment.yaml > final-deployment.yaml
+
+      - echo Deploying to EKS...
+      - kubectl apply -f final-deployment.yaml
+      - kubectl apply -f brain-tasks-service.yaml
