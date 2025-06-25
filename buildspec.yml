@@ -41,3 +41,7 @@ phases:
       - echo Deploying to EKS...
       - kubectl apply -f final-deployment.yaml
       - kubectl apply -f brain-tasks-service.yaml
+
+      - echo Generating imagedefinitions.json
+      - echo '[{"name":"brain-tasks-app","imageUri":"047447426147.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest"}]' > imagedefinitions.json
+
