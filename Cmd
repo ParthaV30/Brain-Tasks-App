@@ -1,0 +1,2 @@
+kubectl apply -f k8s/nginx-deploy.yaml
+kubectl -n devops-demo get svc reverse-proxy -o wide
