@@ -1,0 +1,11 @@
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+
+# install postgres with a stable release name
+helm install my-postgres bitnami/postgresql \
+  --namespace devops-demo \
+  --set global.postgresql.auth.postgresPassword=pgpassword \
+  --set global.postgresql.auth.username=pguser \
+  --set global.postgresql.auth.password=pgpassword \
+  --set global.postgresql.auth.database=pgdb \
+  --wait
